@@ -1,23 +1,31 @@
 import json
-import os
+import os # Make sure this is imported!
 import difflib
 from openai import OpenAI
 
 # 🔑 Set your OpenAI API key here
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# --- START OF CHANGE ---
+# Get the directory where the current script (logic_core.py) is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FAQ_PATH = os.path.join(BASE_DIR, 'faq.json')
+
 # 📂 Load FAQ data from faq.json
 def load_faqs():
     try:
-        with open("faq.json", "r") as f:
+        # Use the constructed absolute path
+        with open(FAQ_PATH, "r") as f: 
             data = json.load(f)
             return data["faqs"]
     except FileNotFoundError:
-        print("⚠️ faq.json not found.")
+        print(f"⚠️ faq.json not found at {FAQ_PATH}") # Added f-string for better debugging
         return []
     except json.JSONDecodeError:
         print("⚠️ Error reading faq.json (check your JSON format).")
         return []
+
+# --- END OF CHANGE ---
 
 # 🔍 Match a user message to an FAQ
 def match_faq(user_input, faqs):
