@@ -12,8 +12,12 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/chat",
       "dest": "backend/app.py"
+    },
+    {
+        "src": "/reset",
+        "dest": "backend/app.py"
     }
   ],
   "github": {
