@@ -36,6 +36,9 @@
       let welcomeShown = false;
       const STORE_BASE = "https://moreriches.uk/collections/all"
 
+
+      const API_BASE_URL = "https://chatbot-backend-flax.vercel.app/"
+
       function toggleTheme() {
         document.body.classList.toggle("dark-mode");
       }
@@ -181,7 +184,7 @@
         messages.scrollTop = messages.scrollHeight;
 
         try {
-          const response = await fetch("/chat", {
+          const response = await fetch(API_BASE_URL + "/api/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: userInput }),
