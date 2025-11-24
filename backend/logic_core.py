@@ -4,7 +4,7 @@ import difflib
 from openai import OpenAI
 
 # 🔑 Set your OpenAI API key here
-client = OpenAI(api_key=("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"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 📂 Load FAQ data from faq.json
 def load_faqs():
