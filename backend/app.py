@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session
 from datetime import timedelta
 import os, uuid
+import CORS 
 from logic_core import load_faqs, match_faq, ask_openai, reset_memory
 
 app = Flask(__name__)

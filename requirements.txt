@@ -4,3 +4,4 @@ jsonschema
 openai
 numpy
 scikit-learn
+flask-cors
