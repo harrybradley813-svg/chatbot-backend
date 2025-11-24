@@ -4,23 +4,17 @@
     {
       "src": "backend/app.py",
       "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.11"
-      }
+      "config": { "maxLambdaSize": "15mb" }
     }
   ],
   "routes": [
     {
-      "src": "/chat",
+      "src": "/chat", 
       "dest": "backend/app.py"
     },
     {
-        "src": "/reset",
-        "dest": "backend/app.py"
+      "src": "/reset", 
+      "dest": "backend/app.py"
     }
-  ],
-  "github": {
-    "silent": true
-  }
+  ]
 }
