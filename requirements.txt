@@ -2,6 +2,4 @@ Flask
 gunicorn
 jsonschema
 openai
-numpy
-scikit-learn
 flask-cors
