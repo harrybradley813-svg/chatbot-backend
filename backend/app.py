@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify, session
 from datetime import timedelta
 import os, uuid
+# Assuming you have a 'CORS' object for configuration
+# If this causes an error, you may need to import flask_cors and use CORS(app)
 import CORS 
 from logic_core import load_faqs, match_faq, ask_openai, reset_memory
 
@@ -33,10 +35,10 @@ def ensure_session_id():
 @app.route("/")
 def home():
     # Since Vercel is only hosting your API, this route might return nothing or a placeholder.
-    # It's generally fine to leave as is if you don't intend to render HTML here.
     return "MRUKs AI Assistant Backend is running.", 200
 
-@app.route("/api/chat", methods=["POST"])
+# *** FIX HERE: Changed from "/api/chat" to "/chat" ***
+@app.route("/chat", methods=["POST"])
 def chat():
     user_input = request.json.get("message", "").strip()
 
@@ -47,17 +49,19 @@ def chat():
     if faq_match:
         return jsonify({"reply": faq_match})
 
+    # The failure is happening inside ask_openai due to the API key.
+    # The Vercel routing fix will get us here, but we still need the key to work.
     ai_reply = ask_openai(user_input)
     return jsonify({"reply": ai_reply})
 
-@app.route("/api/reset", methods=["POST"])
+# *** FIX HERE: Changed from "/api/reset" to "/reset" ***
+@app.route("/reset", methods=["POST"])
 def reset():
     reset_memory()
     session.clear()
     return jsonify({"reply": "Chat memory cleared!"})
 
 # --- CLEANED RUNTIME BLOCK ---
-# Vercel ignores these blocks, but we keep a single, clean one for local testing.
 if __name__ == "__main__":
     print("🚀 Running chatbot on http://127.0.0.1:5000")
     # Set debug=True for local development only
