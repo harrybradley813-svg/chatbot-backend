@@ -1,0 +1,652 @@
+body {
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  background: #f4f6fb;
+  transition: background 0.3s ease;
+}
+
+.dark-mode {
+  background: #1e1e1e;
+}
+
+/* ============ CHAT WIDGET BUTTON ============ */
+#chatButton {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+  background: #007bff;
+  color: white;
+  font-size: 22px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#chatButton:hover {
+  background: #0066dd;
+  transform: scale(1.05);
+}
+
+/* ============ CHATBOX ============ */
+#chatbox {
+  position: fixed;
+  bottom: 95px;
+  right: 30px;
+  width: 340px;
+  height: 500px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 999;
+}
+
+#chatbox.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#chatbox.hidden {
+  display: none;
+}
+
+#chatbox.fade-out {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+/* ============ HEADER ============ */
+header {
+  background: linear-gradient(90deg, #007bff, #009dff);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+header button:hover {
+  transform: rotate(20deg);
+}
+
+/* ============ MESSAGES AREA ============ */
+#messages {
+  flex-grow: 1;
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f9f9fb;
+}
+
+/* ============ CHAT BUBBLES ============ */
+.message {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  word-wrap: break-word;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+.message.user {
+  background: #007bff;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.message.bot {
+  background: #e8e8eb;
+  color: #222;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* ============ TIMESTAMPS ============ */
+.timestamp {
+  font-size: 11.5px;
+  color: #b0b0b0;
+  font-style: italic;
+  text-align: right;
+  align-self: flex-end;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  padding-right: 6px;
+  opacity: 0.8;
+}
+
+/* ============ TYPING DOTS ============ */
+.message.typing {
+  background: #e8e8eb;
+  display: flex;
+  gap: 3px;
+}
+
+.message.typing span {
+  width: 6px;
+  height: 6px;
+  background: #888;
+  border-radius: 50%;
+  animation: blink 1.2s infinite ease-in-out;
+}
+
+.message.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.message.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ============ INPUT AREA ============ */
+.chat-footer {
+  display: flex;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.chat-footer input {
+  flex-grow: 1;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: #f1f3f6;
+  font-size: 13px;
+  color: #222;
+  outline: none;
+}
+
+.chat-footer input::placeholder {
+  color: #999;
+}
+
+.chat-footer button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s;
+}
+
+.chat-footer button:hover {
+  background: #0066dd;
+}
+
+/* ============ YES / NO BOX ============ */
+.choice-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.choice-btn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.choice-btn.yes {
+  background: #007bff;
+  color: white;
+}
+
+.choice-btn.no {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.choice-btn.yes:hover {
+  background: #0066dd;
+}
+
+.choice-btn.no:hover {
+  background: #d6d6d6;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* ============ DARK MODE ============ */
+.dark-mode #chatbox {
+  background: #2a2a2a;
+  color: white;
+}
+
+.dark-mode #messages {
+  background: #1f1f1f;
+}
+
+.dark-mode .message.user {
+  background: #007bff;
+}
+
+.dark-mode .message.bot {
+  background: #3a3a3a;
+  color: #eaeaea;
+}
+
+.dark-mode .chat-footer {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+.dark-mode .chat-footer input {
+  background: #3a3a3a;
+  color: #eee;
+}
+
+.dark-mode .chat-footer button {
+  background: #009dff;
+}
+.timestamp {
+  font-size: 11.5px;
+  color: #b0b0b0;
+  font-style: italic;
+  text-align: right;
+  align-self: flex-end;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  padding-right: 6px;
+  opacity: 0.8;
+}
+
+.dark-mode .timestamp {
+  color: #9a9a9a;
+}
+
+/* ============ WELCOME MESSAGE ============ */
+.message.welcome {
+  background: linear-gradient(145deg, #e2efff, #d1e6ff);
+  border: 1px solid #b8d6ff;
+  color: #0f254f;
+  font-weight: 500;
+  font-size: 14px;
+  align-self: center;
+  text-align: center;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin: 12px auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  animation: fadeInSlow 1.2s ease forwards;
+  max-width: 85%;
+}
+
+/* Dark mode version for welcome bubble */
+.dark-mode .message.welcome {
+  background: linear-gradient(145deg, #2e3b50, #3a4b64);
+  border: 1px solid #4b5e7b;
+  color: #e8f0ff;
+}
+
+/* ============ SMOOTHER FADE ANIMATION ============ */
+@keyframes fadeInSlow {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.timestamp {
+  font-size: 11px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  color: #8a8a8a;
+  text-align: left;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  margin-right: 6px;
+  opacity: 0.85;
+  display: block;
+  align-self: flex-end;
+  animation: fadeInSlow 0.6s ease forwards;
+}
+
+/* Subtle dark mode adjustment */
+.dark-mode .timestamp {
+  color: #b2b2b2;
+}
+
+/* Position timestamps right below their respective bubbles */
+.message.bot + .timestamp,
+.message.user + .timestamp {
+  margin-top: -4px;
+  margin-bottom: 10px;
+  text-align: left;
+  align-self: flex-end;
+}
+.timestamp {
+  font-size: 11px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  color: #8a8a8a;
+  opacity: 0.9;
+  margin-top: 3px;
+  margin-bottom: 6px;
+  animation: fadeInSlow 0.5s ease forwards;
+}
+
+/* Align timestamps based on who sent the message */
+.message.user + .timestamp {
+  text-align: right;
+  align-self: flex-end;
+  margin-right: 10px;
+  color: #7c7c7c;
+}
+
+.message.bot + .timestamp {
+  text-align: left;
+  align-self: flex-start;
+  margin-left: 10px;
+  color: #9a9a9a;
+}
+
+/* Subtle dark mode contrast */
+.dark-mode .message.user + .timestamp {
+  color: #b5b5b5;
+}
+
+.dark-mode .message.bot + .timestamp {
+  color: #9e9e9e;
+}
+
+/* Smooth appearance */
+@keyframes fadeInSlow {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.product-list {
+  list-style: none;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+
+.product-list li {
+  margin: 5px 0;
+}
+
+.product-list a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.product-list a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+.online-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #00ff6a;
+  border-radius: 50%;
+  margin-left: 6px;
+  box-shadow: 0 0 6px #00ff6a;
+}
+
+.message.bot.typing span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  animation: typingDots 1s infinite;
+}
+
+.message.bot.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.message.bot.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingDots {
+  0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-4px); }
+}
+.product-list {
+  list-style: none;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+
+.product-list li {
+  margin: 5px 0;
+}
+
+.product-list a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.product-list a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+.product-list {
+  list-style: none;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+
+.product-list li {
+  margin: 6px 0;
+}
+
+.buy-link {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
+}
+
+.buy-link:hover {
+  background: #0066dd;
+}
+
+.buy-link:active {
+  transform: translateY(1px);
+}
+
+.dark-mode .buy-link {
+  background: #009dff;
+}
+.message.compact {
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.3;
+  padding: 8px 12px;
+  border-radius: 16px;
+}
+
+/* Make bot and user bubbles proportional */
+.message.user.compact {
+  background: var(--bubble-user);
+  color: #fff;
+  align-self: flex-end;
+}
+
+.message.bot.compact {
+  background: var(--bubble-bot);
+  color: var(--text);
+  align-self: flex-start;
+}
+
+@media (max-width: 600px) {
+  .message.compact {
+    max-width: 90%;
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+}
+.product-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.buy-link {
+  display: inline-block;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  background: #0078ff;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 0;
+  border-radius: 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.buy-link:hover {
+  background: #005fcc;
+  transform: translateY(-2px);
+}
+
+/* Responsive tweak */
+@media (max-width: 600px) {
+  .buy-link {
+    max-width: 100%;
+    font-size: 14px;
+    padding: 8px 0;
+  }
+}
+#chatbox.hidden {
+  display: none !important;
+}
+
+#chatbox.visible {
+  display: flex !important;
+}
+#chatButton {
+  display: flex !important;
+  z-index: 999999 !important;
+}
+.bot-card {
+  background: #ffffff;
+  padding: 14px 16px;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  border: 1px solid #e5e9f2;
+  max-width: 90%;
+  animation: fadeInSlow 0.8s ease forwards;
+}
+
+/* Dark mode card */
+.dark-mode .bot-card {
+  background: #2b2b2b;
+  border: 1px solid #3d3d3d;
+}
+
+/* Section titles */
+.bot-card strong {
+  font-size: 14px;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Product buttons */
+.buy-link {
+  display: block;
+  width: 100%;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  padding: 9px 0;
+  border-radius: 14px;
+  font-size: 13px;
+  text-align: center;
+  transition: 0.25s ease;
+}
+
+.buy-link:hover {
+  background: #005fcc;
+  transform: translateY(-1px);
+}
+
+/* Make links (email / instagram) stand out */
+.message a {
+  color: #007bff !important;
+  font-weight: 600;
+}
+
+.dark-mode .message a {
+  color: #4ea8ff !important;
+}

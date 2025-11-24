@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MRUKs AI Assistant</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- Floating Chat Button -->
+    <div id="chatButton" onclick="toggleChat()">💬</div>
+
+    <!-- Chatbox -->
+    <div id="chatbox" class="hidden">
+      <header>
+        💬 MRUKs AI Assistant
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      </header>
+
+      <div id="messages"></div>
+
+      <div class="chat-footer">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="Type your message..."
+          onkeypress="if(event.key === 'Enter'){sendMessage()}"
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      let messageCount = 0;
+      let welcomeShown = false;
+      const STORE_BASE = "https://moreriches.uk/collections/all"
+
+      function toggleTheme() {
+        document.body.classList.toggle("dark-mode");
+      }
+
+      function toggleChat() {
+        const chatbox = document.getElementById("chatbox");
+        if (chatbox.classList.contains("visible")) {
+          chatbox.classList.remove("visible");
+          setTimeout(() => chatbox.classList.add("hidden"), 300);
+        } else {
+          chatbox.classList.remove("hidden");
+          setTimeout(() => chatbox.classList.add("visible"), 10);
+
+          // ✅ Show welcome + buy + contact messages (only once)
+          if (!welcomeShown) {
+            setTimeout(showWelcomeMessage, 500);
+            setTimeout(showBuyNowMessage, 1500);
+            setTimeout(showContactMessage, 2500);
+            welcomeShown = true;
+          }
+        }
+      }
+
+      function getTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      function showWelcomeMessage() {
+        const messages = document.getElementById("messages");
+        const botMsg = document.createElement("div");
+        botMsg.className = "message welcome fade-in";
+        botMsg.textContent =
+          "💬 More Riches, Less Problems - Welcome to MRUK’s Official Chatbot";
+        messages.appendChild(botMsg);
+
+        const time = document.createElement("div");
+        time.className = "timestamp";
+        time.textContent = getTime();
+        messages.appendChild(time);
+      }
+
+      // 🧢 Pre-made message: Buy now with product links
+      function showBuyNowMessage() {
+  const messages = document.getElementById("messages");
+
+  const hats = [
+    { name: "🧢 ALL ME ONLY ME Trucker Hat – Black", url: "https://moreriches.uk/products/all-me-only-me-trucker-hat-black" },
+    { name: "🧢 ALL ME ONLY ME Trucker Hat – Blue", url: "https://moreriches.uk/products/all-me-only-me-trucker-hat-blue" },
+    { name: "🧢 ALL ME ONLY ME Trucker Hat – Navy", url: "https://moreriches.uk/products/all-me-only-me-trucker-hat-navy" },
+    { name: "🧢 MR25 Signature Trucker (Unreleased)", url: "https://moreriches.uk/products/mr25-signature-trucker-unreleased" },
+    { name: "🧢 More Riches Trucker Hat – Pink", url: "https://moreriches.uk/products/more-riches-trucker-hat-pink?pr_prod_strat=e5_desc&pr_rec_id=a8cffd426&pr_rec_pid=15110850838858&pr_ref_pid=15113714827594&pr_seq=uniform" },
+    { name: "🧢 More Riches Trucker Hat – Black & Gold", url: "https://moreriches.uk/products/more-riches-trucker-hat-black-gold?pr_prod_strat=e5_desc&pr_rec_id=e56e38d1d&pr_rec_pid=15110850969930&pr_ref_pid=15110850838858&pr_seq=uniform" },
+    { name: "🧢 More Riches Trucker Hat – Triple Black", url: "https://moreriches.uk/products/more-riches-trucker-hat-triple-black?pr_prod_strat=e5_desc&pr_rec_id=a12b935e2&pr_rec_pid=15110851101002&pr_ref_pid=15110850969930&pr_seq=uniform" },
+    { name: "🧢 More Riches Trucker Hat – Black", url: "https://moreriches.uk/products/more-riches-trucker-hat-black?pr_prod_strat=e5_desc&pr_rec_id=84bd8d504&pr_rec_pid=15110850347338&pr_ref_pid=15110851101002&pr_seq=uniform" },
+  ];
+
+  const tshirts = [
+    { name: "👕 MR25 Less Limitations Tee – White/Pink", url: "https://moreriches.uk/products/mr25-less-limitations-tee-white-pink-copy" },
+    { name: "👕 MR25 Less Limitations Tee – White/Blue", url: "https://moreriches.uk/products/mr25-less-limitations-tee-white-blue-copy?pr_prod_strat=e5_desc&pr_rec_id=a122bdd80&pr_rec_pid=15128184815946&pr_ref_pid=15128189174090&pr_seq=uniform" },
+  ];
+
+  const longsleeves = [
+    { name: "👔 MR25 Bumblebee Longsleeve (Unreleased)", url: "https://moreriches.uk/products/mr25-bumblebee-longsleeve-unreleased" },
+    { name: "👔 MR25 Silverscript Longsleeve", url: "https://moreriches.uk/products/mr25-silverscript-longlseeve?pr_prod_strat=jac&pr_rec_id=ea395e15e&pr_rec_pid=15113692676426&pr_ref_pid=15113697263946&pr_seq=uniform" },
+    { name: "👔 MR25 Snowscript Longsleeve", url: "https://moreriches.uk/products/mr25-snowscript-longsleeve?pr_prod_strat=e5_desc&pr_rec_id=2a4de69e2&pr_rec_pid=15201018315082&pr_ref_pid=15113692676426&pr_seq=uniform" },
+  ];
+
+  // Helper function to generate clickable buttons
+  const generateList = (items) =>
+    items.map((i) => `<li><button class="buy-link" data-url="${i.url}">${i.name}</button></li>`).join("");
+
+  // Build HTML structure
+  const botMsg = document.createElement("div");
+  botMsg.className = "message bot fade-in";
+  botMsg.innerHTML = `
+    🛍️ Would you like to buy now?<br><br>
+    <strong>🧢 Hats:</strong>
+    <ul class="product-list">${generateList(hats)}</ul>
+    <strong>👕 T-Shirts:</strong>
+    <ul class="product-list">${generateList(tshirts)}</ul>
+    <strong>👔 Long Sleeves:</strong>
+    <ul class="product-list">${generateList(longsleeves)}</ul>
+  `;
+  messages.appendChild(botMsg);
+
+  const time = document.createElement("div");
+  time.className = "timestamp";
+  time.textContent = getTime();
+  messages.appendChild(time);
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+      // 📞 Pre-made message: Contact info
+      function showContactMessage() {
+        const messages = document.getElementById("messages");
+        const botMsg = document.createElement("div");
+        botMsg.className = "message bot fade-in";
+        botMsg.innerHTML = `
+          📞 Need help? Contact our customer service:<br>
+          <p>Email: <a href="mailto:morerichesuk@gmail.com">morerichesuk@gmail.com</a></p>
+          <p>Instagram: <a href="https://www.instagram.com/morerichesuk/" target="_blank">@morerichesuk</a></p>
+        `;
+        messages.appendChild(botMsg);
+
+        const time = document.createElement("div");
+        time.className = "timestamp";
+        time.textContent = getTime();
+        messages.appendChild(time);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      async function sendMessage() {
+        const input = document.getElementById("userInput");
+        const messages = document.getElementById("messages");
+        const userInput = input.value.trim();
+
+        if (!userInput) return;
+
+        const userMsg = document.createElement("div");
+        userMsg.className = "message user";
+        userMsg.textContent = userInput;
+        messages.appendChild(userMsg);
+
+        const userTime = document.createElement("div");
+        userTime.className = "timestamp";
+        userTime.textContent = getTime();
+        messages.appendChild(userTime);
+
+        input.value = "";
+        messages.scrollTop = messages.scrollHeight;
+        messageCount++;
+
+        // Typing dots
+        const typing = document.createElement("div");
+        typing.className = "message bot typing";
+        typing.innerHTML = "<span></span><span></span><span></span>";
+        messages.appendChild(typing);
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+          const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userInput }),
+          });
+
+          const data = await response.json();
+
+          messages.removeChild(typing);
+
+          const botMsg = document.createElement("div");
+          botMsg.className = "message bot fade-in";
+          botMsg.textContent = data.reply;
+            data.reply || "Sorry, I couldn’t generate a response.";
+          messages.appendChild(botMsg);
+
+          const botTime = document.createElement("div");
+          botTime.className = "timestamp";
+          botTime.textContent = getTime();
+          messages.appendChild(botTime);
+
+          messages.scrollTop = messages.scrollHeight;
+
+          if (messageCount >= 6) {
+            const endMsg = document.createElement("div");
+            endMsg.className = "message bot fade-in";
+            endMsg.textContent =
+              "Is that all, or is there more I can help you with?";
+            messages.appendChild(endMsg);
+
+            const choiceBox = document.createElement("div");
+            choiceBox.className = "choice-box fade-in";
+            choiceBox.innerHTML = `
+              <button class="choice-btn yes" onclick="handleEndChoice('yes')">Yes</button>
+              <button class="choice-btn no" onclick="handleEndChoice('no')">No</button>
+            `;
+            messages.appendChild(choiceBox);
+
+            messages.scrollTop = messages.scrollHeight;
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          messages.removeChild(typing);
+
+          const errorMsg = document.createElement("div");
+          errorMsg.className = "message bot fade-in";
+          errorMsg.textContent =
+            "Sorry, something went wrong. Please try again.";
+          messages.appendChild(errorMsg);
+        }
+      }
+
+      function handleEndChoice(choice) {
+        const messages = document.getElementById("messages");
+        const botMsg = document.createElement("div");
+        botMsg.className = "message bot fade-in";
+
+        if (choice === "yes") {
+          botMsg.textContent = "Great! What else can I help you with?";
+          messageCount = 0;
+        } else {
+          botMsg.textContent = "Okay, closing chat now. Goodbye!";
+
+          const chatbox = document.getElementById("chatbox");
+          chatbox.classList.add("fade-out");
+
+          setTimeout(() => {
+            chatbox.classList.remove("visible");
+            chatbox.classList.remove("fade-out");
+            chatbox.classList.add("hidden");
+          }, 800);
+        }
+
+        messages.appendChild(botMsg);
+
+        const botTime = document.createElement("div");
+        botTime.className = "timestamp";
+        botTime.textContent = getTime();
+        messages.appendChild(botTime);
+
+        messages.scrollTop = messages.scrollHeight;
+      }
+    document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".buy-link");
+  if (!btn) return;
+  const url = btn.getAttribute("data-url");
+  if (url) {
+    window.location.href = url; // opens same tab instantly
+  }
+});
+    </script>
+  </body>
+</html>
+
+
+
+
