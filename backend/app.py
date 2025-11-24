@@ -3,7 +3,7 @@ from datetime import timedelta
 import os, uuid
 # Assuming you have a 'CORS' object for configuration
 # If this causes an error, you may need to import flask_cors and use CORS(app)
-import CORS 
+import CORS
 from logic_core import load_faqs, match_faq, ask_openai, reset_memory
 
 app = Flask(__name__)
@@ -40,6 +40,10 @@ def home():
 # *** FIX HERE: Changed from "/api/chat" to "/chat" ***
 @app.route("/chat", methods=["POST"])
 def chat():
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+
+    if not openai_api_key:
+        return jsonify({"reply": "Error: OpenAI API Key is missing on the server."}), 500
     user_input = request.json.get("message", "").strip()
 
     if not user_input:
@@ -51,7 +55,7 @@ def chat():
 
     # The failure is happening inside ask_openai due to the API key.
     # The Vercel routing fix will get us here, but we still need the key to work.
-    ai_reply = ask_openai(user_input)
+    ai_reply = ask_openai(user_input, openai_api_key)
     return jsonify({"reply": ai_reply})
 
 # *** FIX HERE: Changed from "/api/reset" to "/reset" ***
