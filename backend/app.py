@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request, jsonify, session
 from datetime import timedelta
 import os, uuid
-# Assuming you have a 'CORS' object for configuration
-# If this causes an error, you may need to import flask_cors and use CORS(app)
-import CORS
+from flask_cors import CORS # This is the correct import
 from logic_core import load_faqs, match_faq, ask_openai, reset_memory
 
 app = Flask(__name__)
+
+# --- CORS INITIALIZATION (NEW/FIXED LINE) ---
+# This line tells the Flask app to use the CORS middleware for cross-origin requests.
+CORS(app)
 
 # --- SESSION CONFIGURATION (CLEANED FOR VERCEL) ---
 # 1. Use a secure secret key from environment variables
