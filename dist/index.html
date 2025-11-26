@@ -37,7 +37,7 @@
       const STORE_BASE = "https://moreriches.uk/collections/all"
 
 
-      const API_BASE_URL = "https://chatbot-backend-six-umber.vercel.app/";
+      const API_BASE_URL = "https://chatbot-backend-y2ay.onrender.com/";
 
       function toggleTheme() {
         document.body.classList.toggle("dark-mode");
@@ -184,7 +184,7 @@
         messages.scrollTop = messages.scrollHeight;
 
         try {
-          const response = await fetch(API_BASE_URL + "/api/chat", {
+          const response = await fetch(API_BASE_URL + "/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: userInput }),
